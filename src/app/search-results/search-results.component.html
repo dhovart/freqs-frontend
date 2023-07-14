@@ -1,0 +1,13 @@
+<div>
+    <input [(ngModel)]="term" placeholder="Search term">
+    <button (click)="search()">Search</button>
+  </div>
+  
+  <div *ngIf="results$ | async as results">
+    <ul>
+      <li *ngFor="let track of results">
+        <h3>{{ track.name }}</h3>
+        <button (click)="addToPlaylist(track)">+ Add to playlist</button>
+      </li>
+    </ul>
+  </div>
