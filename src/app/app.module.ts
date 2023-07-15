@@ -5,21 +5,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { APOLLO_NAMED_OPTIONS, ApolloModule, NamedOptions } from 'apollo-angular';
 import { InMemoryCache } from '@apollo/client/core';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { PlaylistCreatorComponent } from './playlist-creator/playlist-creator.component';
+import { AppComponent } from '@components/app/app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    PlaylistCreatorComponent
   ],
   imports: [
     BrowserModule,
     ApolloModule,
     HttpClientModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     {

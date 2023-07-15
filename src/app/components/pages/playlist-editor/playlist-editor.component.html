@@ -1,0 +1,11 @@
+<div *ngIf="playlist$ | async as playlist">
+    <freqs-stealth-input placeholder="Untitled playlist" [value]="playlist.name" (blurEvent)="onNameBlur()"
+        (valueChange)="onNameChanged($event)"></freqs-stealth-input>
+    <ul>
+        <li *ngFor="let track of playlist.tracks">
+            {{ track?.name ?? "Untitled track" }}
+        </li>
+    </ul>
+</div>
+<h3>Add tracks</h3>
+<freqs-spotify-track-search (trackSelected)="onTrackSelected($event)" />

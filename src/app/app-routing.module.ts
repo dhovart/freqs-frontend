@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SearchResultsComponent } from './search-results/search-results.component';
-import { HomeComponent } from './home/home.component';
-import { PlaylistCreatorComponent } from './playlist-creator/playlist-creator.component';
+import { HomeComponent } from '@components/pages/home/home.component';
+import { PlaylistEditorComponent } from '@components/pages/playlist-editor/playlist-editor.component';
 
 const routes: Routes = [
   {
@@ -11,15 +10,15 @@ const routes: Routes = [
     title: 'Freqs'
   },
   {
-    path: 'new-playlist',
-    component: PlaylistCreatorComponent,
-    title: 'Create a playlist'
+    path: 'playlist',
+    component: PlaylistEditorComponent,
+    title: 'New playlist'
   },
   {
-    path: 'search',
-    component: SearchResultsComponent,
-    title: 'Search for songs'
-}
+    path: 'playlist/:id',
+    component: PlaylistEditorComponent,
+    title: 'Edit a playlist'
+  },
 ];
 
 @NgModule({

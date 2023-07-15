@@ -9,15 +9,17 @@
     "test": "ng test",
     "lint": "ng lint",
     "grab-auth-cookie": "ts-node support/grab-auth-cookie.mts",
-    "generate": "graphql-codegen"
+    "types:generate": "graphql-codegen"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^16.1.0",
+    "@angular/cdk": "^16.1.5",
     "@angular/common": "^16.1.0",
     "@angular/compiler": "^16.1.0",
     "@angular/core": "^16.1.0",
     "@angular/forms": "^16.1.0",
+    "@angular/material": "^16.1.5",
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",

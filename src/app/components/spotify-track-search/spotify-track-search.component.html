@@ -7,7 +7,7 @@
     <ul>
       <li *ngFor="let track of results">
         <h3>{{ track.name }}</h3>
-        <button (click)="addToPlaylist(track)">+ Add to playlist</button>
+        <button (click)="selectTrack(track)">+ Add to playlist</button>
       </li>
     </ul>
   </div>
