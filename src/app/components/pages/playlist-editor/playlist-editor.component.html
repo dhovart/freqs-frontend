@@ -1,5 +1,5 @@
 <div *ngIf="playlist$ | async as playlist">
-    <freqs-stealth-input placeholder="Untitled playlist" [value]="playlist.name" (blurEvent)="onNameBlur()"
+    <freqs-stealth-input placeholder="Untitled playlist" [value]="playlist.name ?? ''" (blurEvent)="onNameBlur()"
         (valueChange)="onNameChanged($event)"></freqs-stealth-input>
     <ul>
         <li *ngFor="let track of playlist.tracks">

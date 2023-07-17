@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Apollo, ApolloBase, gql } from 'apollo-angular';
-import { ApolloQueryResult } from '@apollo/client/core';
+import { ApolloQueryResult, FetchResult } from '@apollo/client/core';
 import { Observable } from 'rxjs';
-import { Query, QueryPlaylistArgs, Playlist, MutationCreatePlaylistArgs, QuerySearchArgs, MutationAddTrackArgs } from 'src/typings/api';
+import { QueryPlaylistArgs, Playlist, MutationCreatePlaylistArgs, QuerySearchArgs, MutationAddTrackArgs, TrackAddedEvent } from 'src/typings/api';
 import { MutationResult } from 'apollo-angular';
-import { MutationUpdatePlaylistNameArgs } from 'src/types/api';
+import { MutationUpdatePlaylistNameArgs } from 'src/typings/api';
 
 @Injectable({
   providedIn: 'root'
@@ -113,5 +113,20 @@ getPlaylist(playlistId: QueryPlaylistArgs['id']): Observable<ApolloQueryResult<{
         }
         ${this.TRACK_DETAILS_FRAGMENT}`,
     }).valueChanges;
+  }
+
+  subscribeToTrackAdded(playlistID: string): Observable<FetchResult<{ trackAdded: TrackAddedEvent }>> {
+    return this.apollo.subscribe({
+      variables: { playlistID },
+      query: gql`
+      subscription OnTrackAdded($playlistID: ID!) {
+        trackAdded(playlistID: $playlistID) {
+          track {
+            id
+            name
+          }
+        }
+      }`,
+    })
   }
 }

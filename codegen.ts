@@ -13,8 +13,6 @@ if(!fs.existsSync(cookiePath)) {
 const cookieJSON =  fs.readFileSync(cookiePath, 'utf-8');
 const cookie = cookieParser.fromJSON(cookieJSON).cookieString();
 
-console.log(cookie);
-
 const config: CodegenConfig = {
   schema: {
     'http://localhost:8080/graphql': {
@@ -25,7 +23,7 @@ const config: CodegenConfig = {
   },
   documents: './src/**/*.ts',
   generates: {
-    './src/types/api.ts': {
+    './src/typings/api.ts': {
       plugins: ['typescript']
     }
   }

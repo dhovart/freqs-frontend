@@ -32,6 +32,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addTrack?: Maybe<Playlist>;
   createPlaylist?: Maybe<Playlist>;
+  updatePlaylistName?: Maybe<Playlist>;
   voteForTrack?: Maybe<Playlist>;
 };
 
@@ -45,6 +46,12 @@ export type MutationAddTrackArgs = {
 export type MutationCreatePlaylistArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
   tracks?: InputMaybe<Array<TrackInput>>;
+};
+
+
+export type MutationUpdatePlaylistNameArgs = {
+  name: Scalars['String']['input'];
+  playlistID: Scalars['ID']['input'];
 };
 
 
@@ -87,11 +94,21 @@ export type QuerySearchArgs = {
   term?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  trackAdded?: Maybe<TrackAddedEvent>;
+};
+
+
+export type SubscriptionTrackAddedArgs = {
+  playlistID: Scalars['ID']['input'];
+};
+
 export type Track = {
   __typename?: 'Track';
   albumName: Scalars['String']['output'];
   artists: Array<Artist>;
-  duration: Scalars['Float']['output'];
+  duration: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
@@ -101,10 +118,16 @@ export type Track = {
   votes: Array<Vote>;
 };
 
+export type TrackAddedEvent = {
+  __typename?: 'TrackAddedEvent';
+  playlistID: Scalars['ID']['output'];
+  track: Track;
+};
+
 export type TrackInput = {
   albumName: Scalars['String']['input'];
   artists: Array<ArtistInput>;
-  duration: Scalars['Float']['input'];
+  duration: Scalars['Int']['input'];
   image?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   spotifyAlbumId?: InputMaybe<Scalars['String']['input']>;
