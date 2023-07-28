@@ -152,5 +152,8 @@ export class PlaylistService {
     }
   }
   
-
+  cleanup() {
+    this.trackAddedSubscription?.unsubscribe();
+    this.trackMovedSubscription?.unsubscribe();
+  }
 }

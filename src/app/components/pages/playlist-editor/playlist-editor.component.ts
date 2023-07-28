@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StealthInputComponent } from '@components/forms/stealth-input/stealth-input.component';
 import { SpotifyTrackSearchComponent } from '@components/spotify-track-search/spotify-track-search.component';
@@ -21,7 +21,7 @@ import { map } from 'rxjs';
   ],
   styleUrls: ['./playlist-editor.component.scss']
 })
-export class PlaylistEditorComponent implements OnInit {
+export class PlaylistEditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private playlistService: PlaylistService,
@@ -31,6 +31,10 @@ export class PlaylistEditorComponent implements OnInit {
   ngOnInit(): void {
     const id$ = this.route.paramMap.pipe(map(params => params.get('id') ?? null));
     this.playlistService.fetchOrInitEmptyPlaylist(id$);
+  }
+
+  ngOnDestroy(): void {
+      this.playlistService.cleanup();
   }
 
   get playlist$() {
