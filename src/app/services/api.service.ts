@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo, ApolloBase, gql } from 'apollo-angular';
 import { ApolloQueryResult, FetchResult } from '@apollo/client/core';
 import { Observable } from 'rxjs';
-import { QueryPlaylistArgs, Playlist, MutationCreatePlaylistArgs, QuerySearchArgs, MutationAddTrackArgs, TrackAddedEvent } from 'src/typings/api';
+import { QueryPlaylistArgs, Playlist, MutationCreatePlaylistArgs, QuerySearchArgs, MutationAddTrackArgs, TrackAddedEvent, MutationUpdatePlaylistTrackPositionArgs, TrackMovedEvent } from 'src/typings/api';
 import { MutationResult } from 'apollo-angular';
 import { MutationUpdatePlaylistNameArgs } from 'src/typings/api';
 
@@ -16,25 +16,30 @@ export class ApiService {
     this.apollo = this.apolloProvider.use('freqs');
   }
   
-  private TRACK_DETAILS_FRAGMENT = gql`
+  private readonly USER_DETAILS_FRAGMENT = gql`
+    fragment UserDetails on User {
+      id
+      name
+      picture
+    }
+  `;
+
+  private readonly TRACK_DETAILS_FRAGMENT = gql`
     fragment TrackDetails on Track {
       id
       name
       duration
       submittedBy {
-        name
-        picture
-        id
+        ...UserDetails
       }
       votes {
         issuer {
-          id
-          name
-          picture
+          ...UserDetails
         }
         comment
       }
     }
+    ${this.USER_DETAILS_FRAGMENT}
   `;
 
   searchSpotifyTracks(variables: QuerySearchArgs): Observable<ApolloQueryResult<any>> {
@@ -129,4 +134,43 @@ getPlaylist(playlistId: QueryPlaylistArgs['id']): Observable<ApolloQueryResult<{
       }`,
     })
   }
+
+  updatePlaylistTrackPosition(variables: MutationUpdatePlaylistTrackPositionArgs): Observable<MutationResult<{ updatePlaylistTrackPosition: Playlist }>> {
+    return this.apollo.mutate({
+      fetchPolicy: 'no-cache',
+      mutation: gql`
+        mutation updatePlaylistTrackPosition($playlistID: ID!, $trackID: ID!, $newPosition: Int!) {
+          updatePlaylistTrackPosition(playlistID: $playlistID, trackID: $trackID, newPosition: $newPosition) {
+            id
+              name
+              tracks {
+                ...TrackDetails
+             }
+          }
+        }
+        ${this.TRACK_DETAILS_FRAGMENT}`,
+        variables
+    })
+  }
+
+  subscribeToTrackMoved(playlistID: string): Observable<FetchResult<{ trackMoved: TrackMovedEvent }>> {
+    return this.apollo.subscribe({
+      variables: { playlistID },
+      query: gql`
+      subscription OnTrackMoved($playlistID: ID!) {
+        trackMoved(playlistID: $playlistID) {
+          playlistID,
+          trackID,
+          oldPosition,
+          newPosition,
+          user {
+            ...UserDetails
+          }
+        }
+      }
+      ${this.USER_DETAILS_FRAGMENT}`,
+    })
+  }
+
+  
 }

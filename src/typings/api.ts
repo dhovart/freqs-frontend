@@ -33,6 +33,7 @@ export type Mutation = {
   addTrack?: Maybe<Playlist>;
   createPlaylist?: Maybe<Playlist>;
   updatePlaylistName?: Maybe<Playlist>;
+  updatePlaylistTrackPosition?: Maybe<Playlist>;
   voteForTrack?: Maybe<Playlist>;
 };
 
@@ -52,6 +53,13 @@ export type MutationCreatePlaylistArgs = {
 export type MutationUpdatePlaylistNameArgs = {
   name: Scalars['String']['input'];
   playlistID: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdatePlaylistTrackPositionArgs = {
+  newPosition: Scalars['Int']['input'];
+  playlistID: Scalars['ID']['input'];
+  trackID: Scalars['ID']['input'];
 };
 
 
@@ -97,10 +105,16 @@ export type QuerySearchArgs = {
 export type Subscription = {
   __typename?: 'Subscription';
   trackAdded?: Maybe<TrackAddedEvent>;
+  trackMoved?: Maybe<TrackMovedEvent>;
 };
 
 
 export type SubscriptionTrackAddedArgs = {
+  playlistID: Scalars['ID']['input'];
+};
+
+
+export type SubscriptionTrackMovedArgs = {
   playlistID: Scalars['ID']['input'];
 };
 
@@ -134,11 +148,26 @@ export type TrackInput = {
   spotifyId: Scalars['String']['input'];
 };
 
+export type TrackMovedEvent = {
+  __typename?: 'TrackMovedEvent';
+  newPosition: Scalars['Int']['output'];
+  oldPosition: Scalars['Int']['output'];
+  playlistID: Scalars['ID']['output'];
+  trackID: Scalars['ID']['output'];
+  user: User;
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   picture?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserInput = {
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  picture?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Vote = {
